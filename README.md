@@ -15,7 +15,7 @@ TITLE | DESCRIPTION
 USER<br />GROUP | www-data (82)<br />www-data (82)
 SSH PORT | 22
 
-## Updates
+## Updates & Support
 [![Code Size](https://img.shields.io/github/languages/code-size/demyxco/ssh?style=flat&color=blue)](https://github.com/demyxco/ssh)
 [![Repository Size](https://img.shields.io/github/repo-size/demyxco/ssh?style=flat&color=blue)](https://github.com/demyxco/ssh)
 [![Watches](https://img.shields.io/github/watchers/demyxco/ssh?style=flat&color=blue)](https://github.com/demyxco/ssh)
@@ -24,6 +24,7 @@ SSH PORT | 22
 
 * Auto built weekly on Sundays (America/Los_Angeles)
 * Rolling release updates
+* For support: [#demyx](https://webchat.freenode.net/?channel=#demyx)
 
 ## Usage
 ```
