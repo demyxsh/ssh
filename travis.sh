@@ -9,13 +9,9 @@ IFS=$'\n\t'
 DEMYX_ALPINE_VERSION=$(docker exec -t ssh cat /etc/os-release | grep VERSION_ID | cut -c 12- | sed -e 's/\r//g')
 DEMYX_OPENSSH_VERSION=$(docker exec -t ssh ssh -V | awk -F '[,]' '{print $1}' | cut -c 9- | sed -e 's/\r//g')
 
-# Replace the README.md
-[[ -f README.md ]] && rm README.md
-cp .readme README.md
-
-# Replace latest with actual versions
-sed -i "s/alpine-latest-informational/alpine-${DEMYX_ALPINE_VERSION}-informational/g" README.md
-sed -i "s/openssh-latest-informational/openssh-${DEMYX_OPENSSH_VERSION}-informational/g" README.md
+# Replace versions
+sed -i "s|alpine-.*.-informational|alpine-${DEMYX_ALPINE_VERSION}-informational|g" README.md
+sed -i "s|openssh-.*.-informational|openssh-${DEMYX_OPENSSH_VERSION}-informational|g" README.md
 
 # Push back to GitHub
 git config --global user.email "travis@travis-ci.org"
