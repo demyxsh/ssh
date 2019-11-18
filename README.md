@@ -8,12 +8,12 @@
 
 OpenSSH is a suite of security-related network-level utilities based on the Secure Shell protocol, which help to secure network communications via the encryption of network traffic over multiple authentication methods and by providing secure tunneling capabilities.
 
-Used for [github.com/demyxco](https://github.com/demyxco/demyx) to allow SFTP to WordPress containers in development mode. This image has created a user `www-data` with the password `www-data`, disabled PermitEmptyPasswords, and disabled root login. 
+Used for [github.com/demyxco](https://github.com/demyxco/demyx) to allow SFTP to WordPress containers in development mode. This image has created a user `demyx` with the password `demyx`, disabled PermitEmptyPasswords, and disabled root login. 
 
 TITLE | DESCRIPTION
 --- | ---
-USER<br />GROUP | www-data (82)<br />www-data (82)
-SSH PORT | 22
+USER<br />GROUP | demyx (1000)<br />demyx (1000)
+SSH PORT | 2222
 
 ## Updates & Support
 [![Code Size](https://img.shields.io/github/languages/code-size/demyxco/ssh?style=flat&color=blue)](https://github.com/demyxco/ssh)
@@ -31,13 +31,13 @@ SSH PORT | 22
 # Run ssh container first
 docker run -d --rm \
 --name ssh \
--v ssh:/home/www-data/.ssh \
+-v ssh:/home/demyx/.ssh \
 --volumes-from php-container \
--p 2222:22 \
+-p 2222:2222 \
 demyx/ssh
 
 # Copy your authorized_keys to container
-docker cp "$HOME"/.ssh/authorized_keys ssh:/home/www-data/.ssh
+docker cp "$HOME"/.ssh/authorized_keys ssh:/home/demyx/.ssh
 
 # Restart ssh container so authorized_keys permissions are set
 docker restart ssh
