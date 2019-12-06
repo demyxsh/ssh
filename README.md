@@ -5,6 +5,7 @@
 [![Alpine](https://img.shields.io/badge/alpine-3.10.3-informational?style=flat&color=blue)](https://hub.docker.com/r/demyx/ssh)
 [![OpenSSH](https://img.shields.io/badge/openssh-8.1p1-informational?style=flat&color=blue)](https://hub.docker.com/r/demyx/ssh)
 [![Buy Me A Coffee](https://img.shields.io/badge/buy_me_coffee-$5-informational?style=flat&color=blue)](https://www.buymeacoffee.com/VXqkQK5tb)
+[![Become a Patron!](https://img.shields.io/badge/become%20a%20patron-$5-informational?style=flat&color=blue)](https://www.patreon.com/bePatron?u=23406156)
 
 OpenSSH is a suite of security-related network-level utilities based on the Secure Shell protocol, which help to secure network communications via the encryption of network traffic over multiple authentication methods and by providing secure tunneling capabilities.
 
