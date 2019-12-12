@@ -17,8 +17,8 @@ before_install:
 
 script:
   - docker build --no-cache -t demyx/"$DEMYX_REPOSITORY" .
-  - docker run -d --rm --name ssh demyx/"$DEMYX_REPOSITORY"
-  - docker exec ssh ssh -V
+  - docker run -d --rm --name="$DEMYX_REPOSITORY" demyx/"$DEMYX_REPOSITORY"
+  - docker exec "$DEMYX_REPOSITORY" "$DEMYX_REPOSITORY" -V
 
 after_success:
   - echo "$DEMYX_PASSWORD" | docker login -u "$DEMYX_USERNAME" --password-stdin

@@ -6,13 +6,22 @@ LABEL sh.demyx.url https://demyx.sh
 LABEL sh.demyx.github https://github.com/demyxco
 LABEL sh.demyx.registry https://hub.docker.com/u/demyx
 
-# Create demyx user
+# Set default variables
+ENV SSH_ROOT=/demyx
+ENV SSH_CONFIG=/etc/demyx
+ENV SSH_LOG=/var/log/demyx
+ENV TZ America/Los_Angeles
+
+# Configure Demyx
 RUN set -ex; \
     addgroup -g 1000 -S demyx; \
     adduser -u 1000 -D -S -G demyx demyx; \
     echo demyx:demyx | chpasswd; \
-    mkdir -p /home/demyx/.ssh; \
-    chown -R demyx:demyx /home/demyx
+    \
+    install -d -m 0755 -o demyx -g demyx "$SSH_ROOT"; \
+    install -d -m 0755 -o demyx -g demyx "$SSH_CONFIG"; \
+    install -d -m 0755 -o demyx -g demyx "$SSH_LOG"; \
+    install -d -m 0755 -o demyx -g demyx /home/demyx/.ssh
 
 # Packages and setup
 RUN set -ex; \
@@ -27,9 +36,7 @@ RUN set -ex; \
     \
     chown demyx:demyx /etc/ssh; \
     \
-    mkdir -p /var/www/html; \
-    chown demyx:demyx /var/www/html; \
-    ln -s /var/www/html /home/demyx
+    ln -s "$SSH_ROOT" /home/demyx
 
 # Copy entrypoint
 COPY demyx.sh /usr/local/bin/demyx
