@@ -3,7 +3,7 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/demyx/ssh?style=flat&color=blue)](https://hub.docker.com/r/demyx/ssh)
 [![Architecture](https://img.shields.io/badge/linux-amd64-important?style=flat&color=blue)](https://hub.docker.com/r/demyx/ssh)
 [![Alpine](https://img.shields.io/badge/alpine-3.10.3-informational?style=flat&color=blue)](https://hub.docker.com/r/demyx/ssh)
-[![OpenSSH](https://img.shields.io/badge/openssh-8.1p1-informational?style=flat&color=blue)](https://hub.docker.com/r/demyx/ssh)
+[![OpenSSH](https://img.shields.io/badge/openssh--informational?style=flat&color=blue)](https://hub.docker.com/r/demyx/ssh)
 [![Buy Me A Coffee](https://img.shields.io/badge/buy_me_coffee-$5-informational?style=flat&color=blue)](https://www.buymeacoffee.com/VXqkQK5tb)
 [![Become a Patron!](https://img.shields.io/badge/become%20a%20patron-$5-informational?style=flat&color=blue)](https://www.patreon.com/bePatron?u=23406156)
 
