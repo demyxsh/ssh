@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/dumb-init /bin/bash
 
 # Prevents ssh errors from local machine
 if [ -f /home/demyx/.ssh/ssh_host_rsa_key ]; then
