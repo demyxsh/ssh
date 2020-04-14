@@ -1,16 +1,16 @@
 FROM alpine
 
-LABEL sh.demyx.image demyx/ssh
-LABEL sh.demyx.maintainer Demyx <info@demyx.sh>
-LABEL sh.demyx.url https://demyx.sh
-LABEL sh.demyx.github https://github.com/demyxco
-LABEL sh.demyx.registry https://hub.docker.com/u/demyx
+LABEL sh.demyx.image        demyx/ssh
+LABEL sh.demyx.maintainer   Demyx <info@demyx.sh>
+LABEL sh.demyx.url          https://demyx.sh
+LABEL sh.demyx.github       https://github.com/demyxco
+LABEL sh.demyx.registry     https://hub.docker.com/u/demyx
 
 # Set default variables
-ENV SSH_ROOT=/demyx
-ENV SSH_CONFIG=/etc/demyx
-ENV SSH_LOG=/var/log/demyx
-ENV TZ America/Los_Angeles
+ENV SSH_ROOT    /demyx
+ENV SSH_CONFIG  /etc/demyx
+ENV SSH_LOG     /var/log/demyx
+ENV TZ          America/Los_Angeles
 
 # Configure Demyx
 RUN set -ex; \
