@@ -38,8 +38,8 @@ RUN set -ex; \
     \
     ln -s "$SSH_ROOT" /home/demyx
 
-# Copy entrypoint
-COPY demyx.sh /usr/local/bin/demyx
+# Copy source
+COPY --chown=demyx:demyx src "$SSH_CONFIG"
 
 # Finalize
 RUN set -ex; \
