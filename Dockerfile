@@ -43,7 +43,12 @@ COPY --chown=demyx:demyx src "$SSH_CONFIG"
 
 # Finalize
 RUN set -ex; \
-    chmod +x /usr/local/bin/demyx
+    # demyx-entrypoint
+    chmod +x "$SSH_CONFIG"/entrypoint.sh; \
+    mv "$SSH_CONFIG"/entrypoint.sh /usr/local/bin/demyx-entrypoint; \
+    \
+    # Reset permissions
+    chown -R root:root /usr/local/bin
 
 EXPOSE 2222
 
