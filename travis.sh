@@ -7,7 +7,7 @@ IFS=$'\n\t'
 
 # Get versions
 DEMYX_ALPINE_VERSION="$(docker exec "$DEMYX_REPOSITORY" cat /etc/os-release | grep VERSION_ID | cut -c 12- | sed -e 's/\r//g')"
-DEMYX_OPENSSH_VERSION="$(docker exec "$DEMYX_REPOSITORY" "$DEMYX_REPOSITORY" -V | awk -F '[,]' '{print $1}' | cut -c 9- | sed -e 's/\r//g')"
+DEMYX_OPENSSH_VERSION="$(docker exec "$DEMYX_REPOSITORY" "$DEMYX_REPOSITORY" -V  2>&1 | cut -c -13 | awk -F '[_]' '{print $2}' | sed -e 's/\r//g')"
 
 # Replace versions
 sed -i "s|alpine-.*.-informational|alpine-${DEMYX_ALPINE_VERSION}-informational|g" README.md
