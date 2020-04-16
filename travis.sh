@@ -6,16 +6,16 @@ set -euo pipefail
 IFS=$'\n\t'
 
 # Get versions
-DEMYX_ALPINE_VERSION="$(docker exec "$DEMYX_REPOSITORY" cat /etc/os-release | grep VERSION_ID | cut -c 12- | sed -e 's/\r//g')"
-DEMYX_OPENSSH_VERSION="$(docker exec "$DEMYX_REPOSITORY" "$DEMYX_REPOSITORY" -V  2>&1 | cut -c -13 | awk -F '[_]' '{print $2}' | sed -e 's/\r//g')"
+DEMYX_SSH_ALPINE_VERSION="$(docker exec "$DEMYX_REPOSITORY" cat /etc/os-release | grep VERSION_ID | cut -c 12- | sed -e 's/\r//g')"
+DEMYX_SSH_OPENSSH_VERSION="$(docker exec "$DEMYX_REPOSITORY" "$DEMYX_REPOSITORY" -V  2>&1 | cut -c -13 | awk -F '[_]' '{print $2}' | sed -e 's/\r//g')"
 
 # Replace versions
-sed -i "s|alpine-.*.-informational|alpine-${DEMYX_ALPINE_VERSION}-informational|g" README.md
-sed -i "s|openssh-.*.-informational|openssh-${DEMYX_OPENSSH_VERSION}-informational|g" README.md
+sed -i "s|alpine-.*.-informational|alpine-${DEMYX_SSH_ALPINE_VERSION}-informational|g" README.md
+sed -i "s|openssh-.*.-informational|openssh-${DEMYX_SSH_OPENSSH_VERSION}-informational|g" README.md
 
 # Echo versions to file
-echo "DEMYX_ALPINE_VERSION=$DEMYX_ALPINE_VERSION
-DEMYX_OPENSSH_VERSION=$DEMYX_OPENSSH_VERSION" > VERSION
+echo "DEMYX_SSH_ALPINE_VERSION=$DEMYX_SSH_ALPINE_VERSION
+DEMYX_SSH_OPENSSH_VERSION=$DEMYX_SSH_OPENSSH_VERSION" > VERSION
 
 # Push back to GitHub
 git config --global user.email "travis@travis-ci.org"
@@ -23,7 +23,7 @@ git config --global user.name "Travis CI"
 git remote set-url origin https://${DEMYX_GITHUB_TOKEN}@github.com/demyxco/"$DEMYX_REPOSITORY".git
 # Commit VERSION first
 git add VERSION
-git commit -m "ALPINE $DEMYX_ALPINE_VERSION, OPENSSH $DEMYX_OPENSSH_VERSION"
+git commit -m "ALPINE $DEMYX_SSH_ALPINE_VERSION, OPENSSH $DEMYX_SSH_OPENSSH_VERSION"
 git push origin HEAD:master
 # Commit the rest
 git add .
