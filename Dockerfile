@@ -23,23 +23,31 @@ RUN set -ex; \
     install -d -m 0755 -o demyx -g demyx "$SSH_LOG"; \
     install -d -m 0755 -o demyx -g demyx /home/demyx/.ssh
 
+# Copy source
+COPY --chown=demyx:demyx src "$SSH_CONFIG"
+
 # Packages and setup
 RUN set -ex; \
-    apk add --no-cache --update bash dumb-init openssh tzdata; \
+    apk add --no-cache --update bash openssh sudo tzdata; \
     # Set up ssh
     sed -i "s|/home/demyx:/sbin/nologin|/home/demyx:/bin/sh|g" /etc/passwd; \
     sed -i "s|#Port 22|Port 2222|g" /etc/ssh/sshd_config; \
     sed -i "s|#PermitRootLogin prohibit-password|PermitRootLogin no|g" /etc/ssh/sshd_config; \
     sed -i "s|#PubkeyAuthentication yes|PubkeyAuthentication yes|g" /etc/ssh/sshd_config; \
     sed -i "s|#PasswordAuthentication yes|PasswordAuthentication no|g" /etc/ssh/sshd_config; \
-    sed -i "s|#PermitEmptyPasswords no|PermitEmptyPasswords no|g" /etc/ssh/sshd_config; \
-    \
-    chown demyx:demyx /etc/ssh; \
-    \
-    ln -s "$SSH_ROOT" /home/demyx
+    sed -i "s|#PermitEmptyPasswords no|PermitEmptyPasswords no|g" /etc/ssh/sshd_config
 
-# Copy source
-COPY --chown=demyx:demyx src "$SSH_CONFIG"
+# Configure sudo
+RUN set -ex; \
+    echo -e "demyx ALL=(ALL) NOPASSWD:SETENV: /etc/demyx/permission.sh" > /etc/sudoers.d/demyx; \
+    \
+    echo '#!/bin/bash' > /usr/local/bin/demyx-permission; \
+    echo 'sudo /etc/demyx/permission.sh' >> /usr/local/bin/demyx-permission; \
+    chmod +x "$SSH_CONFIG"/permission.sh; \
+    chmod +x /usr/local/bin/demyx-permission; \
+    \
+    # Supresses the sudo warning for now
+    echo "Set disable_coredump false" > /etc/sudo.conf
 
 # Finalize
 RUN set -ex; \
@@ -48,6 +56,7 @@ RUN set -ex; \
     mv "$SSH_CONFIG"/entrypoint.sh /usr/local/bin/demyx-entrypoint; \
     \
     # Reset permissions
+    chown root:root "$SSH_CONFIG"/permission.sh; \
     chown -R root:root /usr/local/bin
 
 EXPOSE 2222

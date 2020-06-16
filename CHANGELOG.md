@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2020-06-16
+### Added
+- permission.sh to generate host keys and reset permission/ownership
+
 ## 2020-04-14
 ### Added
 - Created src directory for main file(s)
