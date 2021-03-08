@@ -9,7 +9,7 @@
 
 Non-root Docker image running Alpine Linux and OpenSSH.
 
-DEMYX | NGINX
+DEMYX | SSH
 --- | ---
 PORT | 2222
 USER | demyx
