@@ -1,7 +1,10 @@
 #!/bin/bash
+# Demyx
+# https://demyx.sh
+set -euo pipefail
 
 # Set proper ssh permissions
-demyx-permission
+sudo -E demyx-permission
 
 # Symlink /demyx
 if [[ ! -f /home/demyx/demyx ]]; then
