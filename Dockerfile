@@ -7,56 +7,51 @@ LABEL sh.demyx.github       https://github.com/demyxco
 LABEL sh.demyx.registry     https://hub.docker.com/u/demyx
 
 # Set default variables
-ENV SSH_ROOT    /demyx
-ENV SSH_CONFIG  /etc/demyx
-ENV SSH_LOG     /var/log/demyx
-ENV TZ          America/Los_Angeles
-
-# Configure Demyx
-RUN set -ex; \
-    addgroup -g 1000 -S demyx; \
-    adduser -u 1000 -D -S -G demyx demyx; \
-    echo demyx:demyx | chpasswd; \
-    \
-    install -d -m 0755 -o demyx -g demyx "$SSH_ROOT"; \
-    install -d -m 0755 -o demyx -g demyx "$SSH_CONFIG"; \
-    install -d -m 0755 -o demyx -g demyx "$SSH_LOG"; \
-    install -d -m 0755 -o demyx -g demyx /home/demyx/.ssh
-
-# Copy source
-COPY --chown=demyx:demyx src "$SSH_CONFIG"
+ENV DEMYX                   /demyx
+ENV DEMYX_CONFIG            /etc/demyx
+ENV DEMYX_LOG               /var/log/demyx
+ENV TZ                      America/Los_Angeles
+# Support for old variables
+ENV SSH_CONFIG              "$DEMYX_CONFIG"
+ENV SSH_LOG                 "$DEMYX_LOG"
+ENV SSH_ROOT                "$DEMYX"
 
 # Packages and setup
 RUN set -ex; \
-    apk add --no-cache --update bash openssh sudo tzdata; \
+    apk add --no-cache --update bash openssh sudo tzdata
+
+# Configure Demyx
+RUN set -ex; \
+    # Create demyx user
+    addgroup -g 1000 -S demyx; \
+    adduser -u 1000 -D -S -G demyx demyx; \
+    \
+    # Create demyx directories
+    install -d -m 0755 -o demyx -g demyx "$DEMYX"; \
+    install -d -m 0755 -o demyx -g demyx "$DEMYX_CONFIG"; \
+    install -d -m 0755 -o demyx -g demyx "$DEMYX_LOG"; \
+    \
+    # Update .bashrc
+    echo 'PS1="$(whoami)@\h:\w \$ "' > /home/demyx/.bashrc; \
+    echo 'PS1="$(whoami)@\h:\w \$ "' > /root/.bashrc
+
+# Imports
+COPY --chown=root:root bin /usr/local/bin
+
+# Finalize
+RUN set -ex; \
     # Set up ssh
     sed -i "s|/home/demyx:/sbin/nologin|/home/demyx:/bin/sh|g" /etc/passwd; \
     sed -i "s|#Port 22|Port 2222|g" /etc/ssh/sshd_config; \
     sed -i "s|#PermitRootLogin prohibit-password|PermitRootLogin no|g" /etc/ssh/sshd_config; \
     sed -i "s|#PubkeyAuthentication yes|PubkeyAuthentication yes|g" /etc/ssh/sshd_config; \
     sed -i "s|#PasswordAuthentication yes|PasswordAuthentication no|g" /etc/ssh/sshd_config; \
-    sed -i "s|#PermitEmptyPasswords no|PermitEmptyPasswords no|g" /etc/ssh/sshd_config
-
-# Configure sudo
-RUN set -ex; \
-    echo -e "demyx ALL=(ALL) NOPASSWD:SETENV: /etc/demyx/permission.sh" > /etc/sudoers.d/demyx; \
+    sed -i "s|#PermitEmptyPasswords no|PermitEmptyPasswords no|g" /etc/ssh/sshd_config; \
     \
-    echo '#!/bin/bash' > /usr/local/bin/demyx-permission; \
-    echo 'sudo /etc/demyx/permission.sh' >> /usr/local/bin/demyx-permission; \
-    chmod +x "$SSH_CONFIG"/permission.sh; \
-    chmod +x /usr/local/bin/demyx-permission; \
+    # Configure sudo
+    echo "demyx ALL=(ALL) NOPASSWD:SETENV: /usr/local/bin/demyx-permission" > /etc/sudoers.d/demyx; \
     \
-    # Supresses the sudo warning for now
-    echo "Set disable_coredump false" > /etc/sudo.conf
-
-# Finalize
-RUN set -ex; \
-    # demyx-entrypoint
-    chmod +x "$SSH_CONFIG"/entrypoint.sh; \
-    mv "$SSH_CONFIG"/entrypoint.sh /usr/local/bin/demyx-entrypoint; \
-    \
-    # Reset permissions
-    chown root:root "$SSH_CONFIG"/permission.sh; \
+    # Set ownership
     chown -R root:root /usr/local/bin
 
 EXPOSE 2222
