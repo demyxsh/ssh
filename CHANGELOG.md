@@ -15,12 +15,12 @@
     - `bin/demyx-permission`
         - Add comments below the shebang.
         - Set strict mode.
-        - `Dockerfile`
-            - Update main environment variables and support old ones.
-            - Rearrange RUN commands.
-            - Update bash PS1.
-            - Update COPY directory.
-            - Move some commands to finalize RUN.
+    - `Dockerfile`
+        - Update main environment variables and support old ones.
+        - Rearrange RUN commands.
+        - Update bash PS1.
+        - Update COPY directory.
+        - Move some commands to finalize RUN.
 - Removed
 
 ## 2020-06-16
