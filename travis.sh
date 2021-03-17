@@ -20,7 +20,7 @@ git config --global user.name "Travis CI"
 git remote set-url origin https://"$DEMYX_GITHUB_TOKEN"@github.com/demyxco/"$DEMYX_REPOSITORY".git
 # Push VERSION file first
 git add VERSION
-git commit -m "ALPINE $DEMYX_NGINX_ALPINE_VERSION, NGINX $DEMYX_NGINX_VERSION"
+git commit -m "ALPINE $DEMYX_SSH_ALPINE_VERSION, SSH $DEMYX_SSH_OPENSSH_VERSION"
 git push origin HEAD:master
 # Add and commit the rest
 git add .
