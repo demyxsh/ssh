@@ -1,9 +1,9 @@
 # CHANGELOG
 
 ## 2022-01-19
-- Update README.md [217a670](https://github.com/demyxco/ssh/commit/217a670d101e7ef559a6a9710706eca1ed6ba4d6)
-- Create version.json [6b09680](https://github.com/demyxco/ssh/commit/6b0968021b3e8547cb166d06a02534f6d7ca0a90)
-- Migrate to GitHub Actions [1222c5d](https://github.com/demyxco/ssh/commit/1222c5d7fcf8c8155bc7cbe35f39257e0c00a4d9)
+- Update README.md [217a670](https://github.com/demyxsh/ssh/commit/217a670d101e7ef559a6a9710706eca1ed6ba4d6)
+- Create version.json [6b09680](https://github.com/demyxsh/ssh/commit/6b0968021b3e8547cb166d06a02534f6d7ca0a90)
+- Migrate to GitHub Actions [1222c5d](https://github.com/demyxsh/ssh/commit/1222c5d7fcf8c8155bc7cbe35f39257e0c00a4d9)
 
 ## 2021-03-08
 - Added
