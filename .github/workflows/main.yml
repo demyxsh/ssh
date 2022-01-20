@@ -29,7 +29,7 @@ jobs:
         shell: 'script -q -e -c "bash {0}"'
         run: |
           docker run -d --rm --name=${{ env.DEMYX_REPOSITORY }} demyx/${{ env.DEMYX_REPOSITORY }}
-          
+
           DEMYX_TEST="$(docker exec ${{ env.DEMYX_REPOSITORY }} ssh -V 2>&1)"
           if [[ "$DEMYX_TEST" == *"OpenSSH"* ]]; then
             echo "$DEMYX_TEST"
