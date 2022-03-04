@@ -2,23 +2,46 @@
 # Demyx
 # https://demyx.sh
 set -euo pipefail
+#
+#   Execute.
+#
+demyx_permission() {
+    local DEMYX_PERMISSION=
+    DEMYX_PERMISSION=/home/demyx
 
-# Prevents ssh errors from local machine
-if [[ -f /home/demyx/.ssh/ssh_host_rsa_key ]]; then
-    [[ ! -f /etc/ssh/ssh_host_rsa_key ]] && cp /home/demyx/.ssh/ssh_host_rsa_key /etc/ssh
-    [[ ! -f /etc/ssh/ssh_host_rsa_key.pub ]] && cp /home/demyx/.ssh/ssh_host_rsa_key.pub /etc/ssh
-else
-    [[ ! -f /etc/ssh/ssh_host_rsa_key ]] && ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -t rsa
-    [[ ! -f /home/demyx/.ssh/ssh_host_rsa_key ]] && cp /etc/ssh/ssh_host_rsa_key /home/demyx/.ssh
-    [[ ! -f /home/demyx/.ssh/ssh_host_rsa_key.pub ]] && cp /etc/ssh/ssh_host_rsa_key.pub /home/demyx/.ssh
-fi
+    # Prevents ssh errors from local machine
+    if [[ -f "$DEMYX_PERMISSION"/.ssh/ssh_host_rsa_key ]]; then
+        if [[ ! -f /etc/ssh/ssh_host_rsa_key ]]; then
+            cp "$DEMYX_PERMISSION"/.ssh/ssh_host_rsa_key /etc/ssh
+        fi
+        if [[ ! -f /etc/ssh/ssh_host_rsa_key.pub ]]; then
+            cp "$DEMYX_PERMISSION"/.ssh/ssh_host_rsa_key.pub /etc/ssh
+        fi
+    else
+        if [[ ! -f /etc/ssh/ssh_host_rsa_key ]]; then
+            ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -t rsa
+        fi
+        if [[ ! -f "$DEMYX_PERMISSION"/.ssh/ssh_host_rsa_key ]]; then
+            cp /etc/ssh/ssh_host_rsa_key "$DEMYX_PERMISSION"/.ssh
+        fi
+        if [[ ! -f "$DEMYX_PERMISSION"/.ssh/ssh_host_rsa_key.pub ]]; then
+            cp /etc/ssh/ssh_host_rsa_key.pub "$DEMYX_PERMISSION"/.ssh
+        fi
+    fi
 
-if [[ -f /home/demyx/.ssh/authorized_keys ]]; then
-    chmod 644 /home/demyx/.ssh/authorized_keys
-fi
+    if [[ -f "$DEMYX_PERMISSION"/.ssh/authorized_keys ]]; then
+        chmod 644 "$DEMYX_PERMISSION"/.ssh/authorized_keys
+    fi
 
-chmod 700 /home/demyx/.ssh
-chmod 600 /etc/ssh/ssh_host_rsa_key
-chown demyx:demyx /etc/ssh/ssh_host_rsa_key
-chown demyx:demyx /etc/ssh/ssh_host_rsa_key.pub
-chown -R demyx:demyx /home/demyx
+    touch /run/sshd.pid
+    chown demyx:demyx /run/sshd.pid
+    chmod 700 "$DEMYX_PERMISSION"/.ssh
+    chmod 600 /etc/ssh/ssh_host_rsa_key
+    chown demyx:demyx /etc/ssh/ssh_host_rsa_key
+    chown demyx:demyx /etc/ssh/ssh_host_rsa_key.pub
+    chown -R demyx:demyx "$DEMYX_PERMISSION"
+}
+#
+#   Init.
+#
+demyx_permission
