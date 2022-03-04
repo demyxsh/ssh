@@ -18,4 +18,4 @@ if [[ ! -L /home/demyx/demyx ]]; then
     ln -sf /demyx /home/demyx/demyx
 fi
 
-/usr/sbin/sshd -D
+/usr/sbin/sshd -D -E "$DEMYX_LOG"/"$DEMYX_DOMAIN".log
