@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2022-03-03
+- Put commands in a function [e7757d3](https://github.com/demyxsh/ssh/commit/e7757d37b5d653676f103e956b2ec90314ad91ec)
+- Start sshd with custom log [512ff82](https://github.com/demyxsh/ssh/commit/512ff827139c1ad0172f594d7b13cdca2bc57ce8)
+- Use -L flag in the conditional [7bd7c70](https://github.com/demyxsh/ssh/commit/7bd7c70466a86cc5440d161ec571318b9831bac4)
+- Create .ssh directory if it doesn't exist [c161f25](https://github.com/demyxsh/ssh/commit/c161f2557bfbf00f9fd21683140a9fa57e6eb76d)
+- Change log name if DEMYX_DOMAIN is set, default to ssh [2465a7e](https://github.com/demyxsh/ssh/commit/2465a7e79a8f38b07c1fe1e467a0abb6d1d59eae)
+- Add WORKDIR [47fb741](https://github.com/demyxsh/ssh/commit/47fb74186cdf50675d39552558555aaa6e03ab6f)
+- Set bash as the shell [b740fdd](https://github.com/demyxsh/ssh/commit/b740fdd83fecbc52377dcd01af5bea965cb195c6)
+
 ## 2022-01-19
 - Update README.md [217a670](https://github.com/demyxsh/ssh/commit/217a670d101e7ef559a6a9710706eca1ed6ba4d6)
 - Create version.json [6b09680](https://github.com/demyxsh/ssh/commit/6b0968021b3e8547cb166d06a02534f6d7ca0a90)
