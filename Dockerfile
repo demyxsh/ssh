@@ -58,4 +58,6 @@ EXPOSE 2222
 
 USER demyx
 
+WORKDIR /home/demyx
+
 ENTRYPOINT ["demyx-entrypoint"]
