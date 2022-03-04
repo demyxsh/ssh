@@ -5,6 +5,11 @@ set -euo pipefail
 
 DEMYX_DOMAIN="${DEMYX_DOMAIN:-ssh}"
 
+# Create .ssh directory if it doesn't exist
+if [[ ! -d /home/demyx/.ssh ]]; then
+    mkdir -p /home/demyx/.ssh
+fi
+
 # Set proper ssh permissions
 sudo -E demyx-permission
 
