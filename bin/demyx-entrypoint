@@ -14,8 +14,8 @@ fi
 sudo -E demyx-permission
 
 # Symlink /demyx
-if [[ ! -f /home/demyx/demyx ]]; then
-    ln -s /demyx /home/demyx/demyx
+if [[ ! -L /home/demyx/demyx ]]; then
+    ln -sf /demyx /home/demyx/demyx
 fi
 
 /usr/sbin/sshd -D
