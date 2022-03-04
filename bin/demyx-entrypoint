@@ -3,6 +3,8 @@
 # https://demyx.sh
 set -euo pipefail
 
+DEMYX_DOMAIN="${DEMYX_DOMAIN:-ssh}"
+
 # Set proper ssh permissions
 sudo -E demyx-permission
 
