@@ -30,13 +30,21 @@ git remote set-url origin git@github.com:demyxsh/ssh.git
 ```
 
 ## Usage
+Password login is enabled by default. Set `DEMYX_PASSWORD` to false to disable password login.
+
 ```
 # Run ssh container first
 docker run -d --rm \
 --name=ssh \
--v ssh:/home/demyx/.ssh \
+-v ssh:/home \
 --volumes-from=php-container \
 -p 2222:2222 \
+-e DEMYX=/demyx \
+-e DEMYX_CONFIG=/etc/demyx \
+-e DEMYX_LOG=/var/log/demyx \
+-e DEMYX_USERNAME=demyx \
+-e DEMYX_PASSWORD=demyx \
+-e TZ=America/Los_Angeles \
 demyx/ssh
 
 # Copy your authorized_keys to container

@@ -7,7 +7,7 @@ set -euo pipefail
 #
 demyx_permission() {
     local DEMYX_PERMISSION=
-    DEMYX_PERMISSION=/home/demyx
+    DEMYX_PERMISSION=/home/"$DEMYX_USERNAME"
 
     # Prevents ssh errors from local machine
     if [[ -f "$DEMYX_PERMISSION"/.ssh/ssh_host_rsa_key ]]; then
@@ -34,12 +34,12 @@ demyx_permission() {
     fi
 
     touch /run/sshd.pid
-    chown demyx:demyx /run/sshd.pid
+    chown "$DEMYX_USERNAME":"$DEMYX_USERNAME" /run/sshd.pid
     chmod 700 "$DEMYX_PERMISSION"/.ssh
     chmod 600 /etc/ssh/ssh_host_rsa_key
-    chown demyx:demyx /etc/ssh/ssh_host_rsa_key
-    chown demyx:demyx /etc/ssh/ssh_host_rsa_key.pub
-    chown -R demyx:demyx "$DEMYX_PERMISSION"
+    chown "$DEMYX_USERNAME":"$DEMYX_USERNAME" /etc/ssh/ssh_host_rsa_key
+    chown "$DEMYX_USERNAME":"$DEMYX_USERNAME" /etc/ssh/ssh_host_rsa_key.pub
+    chown -R "$DEMYX_USERNAME":"$DEMYX_USERNAME" "$DEMYX_PERMISSION"
 }
 #
 #   Init.
