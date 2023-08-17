@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2023-08-17
+- Add new file [5890f46](https://github.com/demyxsh/ssh/commit/5890f46a3d658a235bfbc692241fe71b03ff8702)
+- Misc updates [114352d](https://github.com/demyxsh/ssh/commit/114352daa62da00d6f1d02406ae2627bd9f51b99)
+- Add new ENVs [fcff27d](https://github.com/demyxsh/ssh/commit/fcff27d2a914c411a45e6ee676994c00fa3b62b3)
+
 ## 2022-03-03
 - Put commands in a function [e7757d3](https://github.com/demyxsh/ssh/commit/e7757d37b5d653676f103e956b2ec90314ad91ec)
 - Start sshd with custom log [512ff82](https://github.com/demyxsh/ssh/commit/512ff827139c1ad0172f594d7b13cdca2bc57ce8)
