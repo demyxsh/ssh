@@ -1,0 +1,96 @@
+#!/bin/bash
+# Demyx
+# https://demyx.sh
+set -euo pipefail
+#
+#   Main
+#
+demyx_sudo() {
+    demyx_sudo_user
+    demyx_sudo_permission
+    demyx_sudo_ssh
+}
+#
+#   User
+#
+demyx_sudo_user() {
+    local DEMYX_SUDO_USER_CHECK=
+    DEMYX_SUDO_USER_CHECK="$(grep "$DEMYX_USERNAME" /etc/passwd || true)"
+
+    # Check if user exist
+    if [[ -z "$DEMYX_SUDO_USER_CHECK" ]]; then
+        addgroup -S "$DEMYX_USERNAME"
+        adduser -DSG "$DEMYX_USERNAME" "$DEMYX_USERNAME"
+    fi
+
+    # Create .ssh directory if it doesn't exist
+    if [[ ! -d /home/"$DEMYX_USERNAME"/.ssh ]]; then
+        mkdir -p /home/"$DEMYX_USERNAME"/.ssh
+    fi
+
+    # Symlink /demyx
+    if [[ ! -L /home/"$DEMYX_USERNAME"/demyx ]]; then
+        ln -sf /demyx /home/"$DEMYX_USERNAME"/demyx
+    fi
+
+    echo "${DEMYX_USERNAME}:${DEMYX_PASSWORD}" | chpasswd
+    sed -i "s|/home/${DEMYX_USERNAME}:/sbin/nologin|/home/${DEMYX_USERNAME}:/bin/bash|g" /etc/passwd
+
+    echo "Username: $DEMYX_USERNAME"
+    echo "Password: $DEMYX_PASSWORD"
+}
+#
+#   Permissions
+#
+demyx_sudo_permission() {
+    local DEMYX_SUDO_PERMISSION=
+    DEMYX_SUDO_PERMISSION=/home/"$DEMYX_USERNAME"
+
+    # Prevents ssh errors from local machine
+    if [[ -f "$DEMYX_SUDO_PERMISSION"/.ssh/ssh_host_rsa_key ]]; then
+        if [[ ! -f /etc/ssh/ssh_host_rsa_key ]]; then
+            cp "$DEMYX_SUDO_PERMISSION"/.ssh/ssh_host_rsa_key /etc/ssh
+        fi
+        if [[ ! -f /etc/ssh/ssh_host_rsa_key.pub ]]; then
+            cp "$DEMYX_SUDO_PERMISSION"/.ssh/ssh_host_rsa_key.pub /etc/ssh
+        fi
+    else
+        if [[ ! -f /etc/ssh/ssh_host_rsa_key ]]; then
+            ssh-keygen -A >/dev/null
+        fi
+        if [[ ! -f "$DEMYX_SUDO_PERMISSION"/.ssh/ssh_host_rsa_key ]]; then
+            cp /etc/ssh/ssh_host_rsa_key "$DEMYX_SUDO_PERMISSION"/.ssh
+        fi
+        if [[ ! -f "$DEMYX_SUDO_PERMISSION"/.ssh/ssh_host_rsa_key.pub ]]; then
+            cp /etc/ssh/ssh_host_rsa_key.pub "$DEMYX_SUDO_PERMISSION"/.ssh
+        fi
+    fi
+
+    if [[ -f "$DEMYX_SUDO_PERMISSION"/.ssh/authorized_keys ]]; then
+        chmod 644 "$DEMYX_SUDO_PERMISSION"/.ssh/authorized_keys
+    fi
+
+    touch /run/sshd.pid
+    chown "$DEMYX_USERNAME":"$DEMYX_USERNAME" /run/sshd.pid
+    chmod 700 "$DEMYX_SUDO_PERMISSION"/.ssh
+    chmod 600 /etc/ssh/ssh_host_rsa_key
+    chown "$DEMYX_USERNAME":"$DEMYX_USERNAME" /etc/ssh/ssh_host_rsa_key
+    chown "$DEMYX_USERNAME":"$DEMYX_USERNAME" /etc/ssh/ssh_host_rsa_key.pub
+    chown -R "$DEMYX_USERNAME":"$DEMYX_USERNAME" "$DEMYX_SUDO_PERMISSION"
+}
+#
+#   SSH
+#
+demyx_sudo_ssh() {
+    DEMYX_DOMAIN="${DEMYX_DOMAIN:-ssh}"
+
+    if [[ "$DEMYX_PASSWORD" = false ]]; then
+        sed -i "s|PasswordAuthentication yes|PasswordAuthentication no|g" /etc/ssh/sshd_config; \
+    fi
+
+    /usr/sbin/sshd -D -E "$DEMYX_LOG"/"$DEMYX_DOMAIN".ssh.log
+}
+#
+#   Init
+#
+demyx_sudo
