@@ -10,6 +10,8 @@ LABEL sh.demyx.registry     https://hub.docker.com/u/demyx
 ENV DEMYX                   /demyx
 ENV DEMYX_CONFIG            /etc/demyx
 ENV DEMYX_LOG               /var/log/demyx
+ENV DEMYX_PASSWORD          demyx
+ENV DEMYX_USERNAME          demyx
 ENV TZ                      America/Los_Angeles
 # Support for old variables
 ENV SSH_CONFIG              "$DEMYX_CONFIG"
