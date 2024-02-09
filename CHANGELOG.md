@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2024-02-08
+- Update description with shameless plug and support link [97b9bef](https://github.com/demyxsh/ssh/commit/97b9befcd61d82f7a9f38f1cc425fc18e619d69e)
+- Set base image to Alpine 3.18 [371df27](https://github.com/demyxsh/ssh/commit/371df272091b883e2237f431b1e0839556412332)
+
 ## 2023-08-17
 - Add new file [5890f46](https://github.com/demyxsh/ssh/commit/5890f46a3d658a235bfbc692241fe71b03ff8702)
 - Misc updates [114352d](https://github.com/demyxsh/ssh/commit/114352daa62da00d6f1d02406ae2627bd9f51b99)
