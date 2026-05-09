@@ -47,24 +47,29 @@ demyx_sudo_permission() {
     DEMYX_SUDO_PERMISSION=/home/"$DEMYX_USERNAME"
 
     # Prevents ssh errors from local machine
-    if [[ -f "$DEMYX_SUDO_PERMISSION"/.ssh/ssh_host_rsa_key ]]; then
-        if [[ ! -f /etc/ssh/ssh_host_rsa_key ]]; then
-            cp "$DEMYX_SUDO_PERMISSION"/.ssh/ssh_host_rsa_key /etc/ssh
+    local DEMYX_SSH_KEY_TYPE=
+    for DEMYX_SSH_KEY_TYPE in rsa ecdsa ed25519; do
+        local DEMYX_SSH_HOME_KEY=
+        local DEMYX_SSH_ETC_KEY=
+        DEMYX_SSH_HOME_KEY="$DEMYX_SUDO_PERMISSION"/.ssh/ssh_host_${DEMYX_SSH_KEY_TYPE}_key
+        DEMYX_SSH_ETC_KEY=/etc/ssh/ssh_host_${DEMYX_SSH_KEY_TYPE}_key
+
+        if [[ -f "$DEMYX_SSH_HOME_KEY" ]]; then
+            cp "$DEMYX_SSH_HOME_KEY" "$DEMYX_SSH_ETC_KEY"
+            if [[ -f "$DEMYX_SSH_HOME_KEY".pub ]]; then
+                cp "$DEMYX_SSH_HOME_KEY".pub "$DEMYX_SSH_ETC_KEY".pub
+            fi
+        elif [[ -f "$DEMYX_SSH_ETC_KEY" ]]; then
+            cp "$DEMYX_SSH_ETC_KEY" "$DEMYX_SSH_HOME_KEY"
+            if [[ -f "$DEMYX_SSH_ETC_KEY".pub ]]; then
+                cp "$DEMYX_SSH_ETC_KEY".pub "$DEMYX_SSH_HOME_KEY".pub
+            fi
+        else
+            ssh-keygen -t "$DEMYX_SSH_KEY_TYPE" -N '' -f "$DEMYX_SSH_ETC_KEY" >/dev/null
+            cp "$DEMYX_SSH_ETC_KEY" "$DEMYX_SSH_HOME_KEY"
+            cp "$DEMYX_SSH_ETC_KEY".pub "$DEMYX_SSH_HOME_KEY".pub
         fi
-        if [[ ! -f /etc/ssh/ssh_host_rsa_key.pub ]]; then
-            cp "$DEMYX_SUDO_PERMISSION"/.ssh/ssh_host_rsa_key.pub /etc/ssh
-        fi
-    else
-        if [[ ! -f /etc/ssh/ssh_host_rsa_key ]]; then
-            ssh-keygen -A >/dev/null
-        fi
-        if [[ ! -f "$DEMYX_SUDO_PERMISSION"/.ssh/ssh_host_rsa_key ]]; then
-            cp /etc/ssh/ssh_host_rsa_key "$DEMYX_SUDO_PERMISSION"/.ssh
-        fi
-        if [[ ! -f "$DEMYX_SUDO_PERMISSION"/.ssh/ssh_host_rsa_key.pub ]]; then
-            cp /etc/ssh/ssh_host_rsa_key.pub "$DEMYX_SUDO_PERMISSION"/.ssh
-        fi
-    fi
+    done
 
     if [[ -f "$DEMYX_SUDO_PERMISSION"/.ssh/authorized_keys ]]; then
         chmod 644 "$DEMYX_SUDO_PERMISSION"/.ssh/authorized_keys

@@ -1,4 +1,4 @@
-FROM alpine:3.18
+FROM debian:stable-slim
 
 LABEL sh.demyx.image        demyx/ssh
 LABEL sh.demyx.maintainer   Demyx <info@demyx.sh>
@@ -20,13 +20,14 @@ ENV SSH_ROOT                "$DEMYX"
 
 # Packages and setup
 RUN set -ex; \
-    apk add --no-cache --update bash openssh sudo tzdata
+    apt update; \
+    apt install -y bash curl git htop nano openssh-client openssh-server sudo tzdata
 
 # Configure Demyx
 RUN set -ex; \
     # Create demyx user
-    addgroup -g 1000 -S demyx; \
-    adduser -u 1000 -D -S -G demyx demyx; \
+    groupadd -g 1000 demyx; \
+    useradd -u 1000 -g demyx -m -s /bin/bash demyx; \
     \
     # Create demyx directories
     install -d -m 0755 -o demyx -g demyx "$DEMYX"; \
@@ -46,9 +47,17 @@ RUN set -ex; \
     sed -i "s|/home/demyx:/sbin/nologin|/home/demyx:/bin/bash|g" /etc/passwd; \
     sed -i "s|#Port 22|Port 2222|g" /etc/ssh/sshd_config; \
     sed -i "s|#PermitRootLogin prohibit-password|PermitRootLogin no|g" /etc/ssh/sshd_config; \
-    sed -i "s|#PubkeyAuthentication|PubkeyAuthentication|g" /etc/ssh/sshd_config; \
-    sed -i "s|#PasswordAuthentication|PasswordAuthentication|g" /etc/ssh/sshd_config; \
-    sed -i "s|#PermitEmptyPasswords no|PermitEmptyPasswords no|g" /etc/ssh/sshd_config; \
+    sed -i "s|#PubkeyAuthentication.*|PubkeyAuthentication no|g" /etc/ssh/sshd_config; \
+    sed -i "s|#PasswordAuthentication.*|PasswordAuthentication yes|g" /etc/ssh/sshd_config; \
+    sed -i "s|#PermitEmptyPasswords.*|PermitEmptyPasswords no|g" /etc/ssh/sshd_config; \
+    sed -i "s|#LoginGraceTime 2m|LoginGraceTime 30|g" /etc/ssh/sshd_config; \
+    sed -i "s|#MaxAuthTries 6|MaxAuthTries 3|g" /etc/ssh/sshd_config; \
+    sed -i "s|#MaxSessions 10|MaxSessions 3|g" /etc/ssh/sshd_config; \
+    sed -i "s|#X11Forwarding yes|X11Forwarding no|g" /etc/ssh/sshd_config; \
+    sed -i "s|#AllowTcpForwarding yes|AllowTcpForwarding local|g" /etc/ssh/sshd_config; \
+    sed -i "s|#PermitUserEnvironment no|PermitUserEnvironment no|g" /etc/ssh/sshd_config; \
+    sed -i "s|#ClientAliveInterval 0|ClientAliveInterval 300|g" /etc/ssh/sshd_config; \
+    sed -i "s|#ClientAliveCountMax 3|ClientAliveCountMax 0|g" /etc/ssh/sshd_config; \
     \
     # Configure sudo
     echo "demyx ALL=(ALL) NOPASSWD:SETENV: /usr/local/bin/demyx-sudo" > /etc/sudoers.d/demyx; \

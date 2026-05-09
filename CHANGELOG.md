@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-05-09
+- Switch base image from Alpine 3.18 to `debian:stable-slim`
+- Replace Alpine setup commands with Debian equivalents and expand installed packages
+- Harden `sshd_config` defaults (auth/session limits, forwarding, keepalive, login grace)
+- Update `bin/demyx-sudo` host key logic to handle `rsa`, `ecdsa`, and `ed25519` keys with bidirectional sync and key generation fallback
+
 ## 2025-07-28
 - Update GitHub Actions workflow to use run ID in commit message for scheduled builds [3da220a](https://github.com/demyxsh/ssh/commit/3da220a894a17b10399f491bcb9f05e7086c5a46)
 
