@@ -38,9 +38,9 @@ jobs:
           fi
       - name: Version
         run: |
-          DEMYX_SSH_ALPINE_VERSION="$(docker exec ${{ env.DEMYX_REPOSITORY }} cat /etc/os-release | grep VERSION_ID | cut -c 12-)"
-          DEMYX_SSH_OPENSSH_VERSION="$(docker exec ${{ env.DEMYX_REPOSITORY }} ssh -V 2>&1 | cut -c -13 | awk -F '[_]' '{print $2}')"
-          DEMYX_JQ="$(jq '.alpine = "'"$DEMYX_SSH_ALPINE_VERSION"'" | .ssh = "'"$DEMYX_SSH_OPENSSH_VERSION"'"' version.json)"
+          DEMYX_SSH_ALPINE_VERSION="$(docker exec ${{ env.DEMYX_REPOSITORY }} sh -c '. /etc/os-release && echo "$VERSION_ID"')"
+          DEMYX_SSH_OPENSSH_VERSION="$(docker exec ${{ env.DEMYX_REPOSITORY }} ssh -V 2>&1 | sed -n 's/^OpenSSH_\([^ ,]*\).*/\1/p')"
+          DEMYX_JQ="$(jq --arg alpine "$DEMYX_SSH_ALPINE_VERSION" --arg ssh "$DEMYX_SSH_OPENSSH_VERSION" '.alpine = $alpine | .ssh = $ssh' version.json)"
 
           # Update versions
           echo "$DEMYX_JQ" > version.json
